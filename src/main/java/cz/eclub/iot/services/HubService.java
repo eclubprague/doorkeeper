@@ -3,6 +3,7 @@ package cz.eclub.iot.services;
 import cz.eclub.iot.model.classes.MessageEntity;
 
 import javax.ws.rs.client.Client;
+import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.Invocation;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
@@ -27,4 +28,6 @@ public class HubService {
         //System.out.println(response.getStatus());
         return response.readEntity(MessageEntity.class);
     }
+
+
 }
