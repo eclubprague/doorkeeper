@@ -10,13 +10,11 @@ import org.glassfish.jersey.jackson.JacksonFeature;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
-import tinyb.*;
 
-import java.util.List;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.locks.Condition;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
+import org.opencv.core.Core;
+import org.opencv.core.Mat;
+import org.opencv.highgui.Highgui;
+import org.opencv.highgui.VideoCapture;
 
 
 public class MyClient {
@@ -35,18 +33,44 @@ public class MyClient {
         messageService = new MessageService(webTarget);
     }
 
+
     public void run() throws InterruptedException {
         new BluetoothTinyb().scan(messageService);
+
     }
 
 
     public static void main(String[] args) throws InterruptedException {
+
         System.out.println(System.getProperty("java.library.path"));
         MyClient myClient = new MyClient();
         myClient.run();
 
+        //runBT();
 
+        //TODO STREAM
+        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+        VideoCapture capture = new VideoCapture();
+        capture.open("rtsp://192.168.1.250/");
+        while (capture.isOpened()) {
 
+            Mat frame = new Mat();
+
+            //camera.grab();
+            //System.out.println("Frame Grabbed");
+            //camera.retrieve(frame);
+            //System.out.println("Frame Decoded");
+
+            capture.read(frame);
+            System.out.println("Frame Obtained");
+
+            System.out.println("Captured Frame Width " + frame.width());
+            Highgui.imwrite("camera.jpg", frame);
+            System.out.println("OK");
+
+            break;
+        }
+        capture.release();
     }
 
 }
