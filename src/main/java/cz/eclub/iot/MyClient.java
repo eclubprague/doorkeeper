@@ -8,6 +8,11 @@ import org.glassfish.jersey.jackson.JacksonFeature;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
+
+import org.opencv.core.Core;
+import org.opencv.core.Mat;
+import org.opencv.highgui.Highgui;
+import org.opencv.highgui.VideoCapture;
 import tinyb.*;
 
 import java.util.List;
@@ -36,7 +41,7 @@ public class MyClient {
         webTarget = client.target("http://iot.eclubprague.com:8080/iot-server/webapi/");
     }
 
-    public void run(){
+    public void run() {
 
         HubService hubService = new HubService(webTarget);
         System.out.println(hubService.getHubById(4));
@@ -134,7 +139,31 @@ public class MyClient {
      * simplied API for discovering devices and services.
      */
     public static void main(String[] args) throws InterruptedException {
-        runBT();
+        //runBT();
+
+        //TODO STREAM
+        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+        VideoCapture capture = new VideoCapture();
+        capture.open("rtsp://192.168.1.250/");
+        while (capture.isOpened()) {
+
+            Mat frame = new Mat();
+
+            //camera.grab();
+            //System.out.println("Frame Grabbed");
+            //camera.retrieve(frame);
+            //System.out.println("Frame Decoded");
+
+            capture.read(frame);
+            System.out.println("Frame Obtained");
+
+            System.out.println("Captured Frame Width " + frame.width());
+            Highgui.imwrite("camera.jpg", frame);
+            System.out.println("OK");
+
+            break;
+        }
+        capture.release();
     }
 
     public static void runBT() throws InterruptedException {
@@ -219,7 +248,7 @@ public class MyClient {
          * mentioned above. We could also modify the update interval, by writing in the period characteristic, but the
          * default 1s is good enough for our purposes.
          */
-        byte[] config = { 0x01 };
+        byte[] config = {0x01};
         tempConfig.writeValue(config);
 
         /*
