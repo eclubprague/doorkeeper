@@ -1,13 +1,22 @@
 package cz.eclub.iot.opencv;
 
+import cz.eclub.iot.qrcode.QRCodeReader;
 import cz.eclub.iot.utils.Constants;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
+import org.opencv.highgui.Highgui;
 import org.opencv.highgui.VideoCapture;
 
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.nio.Buffer;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class RTSPStream implements Runnable{
+    private int id = 0;
 
     private VideoCapture capture;
     private String rtspAddress;
@@ -37,10 +46,29 @@ public class RTSPStream implements Runnable{
         }
 
         while (isRunning.get()) {
-
+            process();
         }
         System.out.println("Stopping stream!");
         capture.release();
+    }
+
+    private void process() {
+        Mat frame = readFrame();
+        Highgui.imwrite("camera.jpg", frame);
+        BufferedImage im = ImageConverter.bufferedImageFromMat(frame);
+        File outputfile = new File("saved"+id+".jpg");
+
+        String res = QRCodeReader.readCode(im);
+        if(res != null) {
+            id++;
+            try {
+                ImageIO.write(im, "jpg", outputfile);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        System.out.println("READ this: "+res);
+        //kill();
     }
 
     public void kill() {
