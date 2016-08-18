@@ -1,16 +1,20 @@
 package cz.eclub.iot;
 
 
+import cz.eclub.iot.bluetooth.BluetoothTinyb;
 import cz.eclub.iot.services.HubService;
+import cz.eclub.iot.services.MessageService;
 import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.jackson.JacksonFeature;
 
-import javax.bluetooth.*;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
-import java.io.IOException;
-import java.util.Arrays;
+
+import org.opencv.core.Core;
+import org.opencv.core.Mat;
+import org.opencv.highgui.Highgui;
+import org.opencv.highgui.VideoCapture;
 
 
 
@@ -19,66 +23,57 @@ public class MyClient {
     ClientConfig config;
     Client client;
     WebTarget webTarget;
+    HubService hubService;
+    MessageService messageService;
 
-    public static void main(String[] args) throws BluetoothStateException, InterruptedException {
-        MyClient myClient = new MyClient();
-        //myClient.run();
-
-        Object lock = new Object();
-
-        DiscoveryListener listener = new DiscoveryListener() {
-            @Override
-            public void deviceDiscovered(RemoteDevice remoteDevice, DeviceClass deviceClass) {
-                try {
-                    System.out.println(remoteDevice.getFriendlyName(true));
-                    System.out.println(remoteDevice.getBluetoothAddress());
-
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void servicesDiscovered(int i, ServiceRecord[] serviceRecords) {
-                System.out.println(Arrays.toString(serviceRecords));
-            }
-
-            @Override
-            public void serviceSearchCompleted(int i, int i1) {
-                System.out.println("c");
-            }
-
-            @Override
-            public void inquiryCompleted(int i) {
-                System.out.println("d");
-                synchronized (lock) {
-                    lock.notifyAll();
-                }
-            }
-        };
-
-        synchronized (lock) {
-            if (LocalDevice.getLocalDevice().getDiscoveryAgent().startInquiry(DiscoveryAgent.GIAC, listener)) {
-                lock.wait();
-            }
-        }
-
-    }
 
     public MyClient() {
         config = new ClientConfig();
         config = new ClientConfig().register(JacksonFeature.class);
         client = ClientBuilder.newClient(config);
         webTarget = client.target("http://iot.eclubprague.com:8080/iot-server/webapi/");
+        messageService = new MessageService(webTarget);
     }
 
-    public void run(){
 
-        HubService hubService = new HubService(webTarget);
-        System.out.println(hubService.getHubById(4));
+    public void run() throws InterruptedException {
+        new BluetoothTinyb().scan(messageService);
+
+    }
 
 
+    public static void main(String[] args) throws InterruptedException {
 
+
+        System.out.println(System.getProperty("java.library.path"));
+        MyClient myClient = new MyClient();
+        myClient.run();
+
+        //runBT();
+
+        //TODO STREAM
+        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+        VideoCapture capture = new VideoCapture();
+        capture.open("rtsp://192.168.1.250/");
+        while (capture.isOpened()) {
+
+            Mat frame = new Mat();
+
+            //camera.grab();
+            //System.out.println("Frame Grabbed");
+            //camera.retrieve(frame);
+            //System.out.println("Frame Decoded");
+
+            capture.read(frame);
+            System.out.println("Frame Obtained");
+
+            System.out.println("Captured Frame Width " + frame.width());
+            Highgui.imwrite("camera.jpg", frame);
+            System.out.println("OK");
+
+            break;
+        }
+        capture.release();
     }
 
 }
