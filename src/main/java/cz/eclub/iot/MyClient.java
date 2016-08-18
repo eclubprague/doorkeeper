@@ -13,6 +13,8 @@ import java.io.IOException;
 import java.util.Arrays;
 
 
+
+
 public class MyClient {
     ClientConfig config;
     Client client;
@@ -74,6 +76,8 @@ public class MyClient {
 
         HubService hubService = new HubService(webTarget);
         System.out.println(hubService.getHubById(4));
+
+
 
     }
 

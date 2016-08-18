@@ -64,6 +64,13 @@
             <version>1.4.6</version>
         </dependency>
 
+        <dependency>
+            <groupId>javax.sip</groupId>
+            <artifactId>jain-sip-ri</artifactId>
+            <version>1.2.293</version>
+        </dependency>
+
+
 
     </dependencies>
 
