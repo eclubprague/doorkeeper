@@ -1,5 +1,6 @@
 package cz.eclub.iot.opencv;
 
+import cz.eclub.iot.http.HTTPClient;
 import cz.eclub.iot.qrcode.QRCodeReader;
 import cz.eclub.iot.utils.Constants;
 import org.opencv.core.Core;
@@ -21,6 +22,7 @@ public class RTSPStream implements Runnable{
     private VideoCapture capture;
     private String rtspAddress;
     private AtomicBoolean isRunning = new AtomicBoolean();
+    private HTTPClient httpClient;
 
     public RTSPStream() {
         this(Constants.RTSP_STREAM_ADDRESS);
@@ -31,6 +33,8 @@ public class RTSPStream implements Runnable{
         this.capture = new VideoCapture();
         this.rtspAddress = address;
         this.isRunning.set(false);
+
+        httpClient = new HTTPClient();
     }
 
     @Override
@@ -61,10 +65,17 @@ public class RTSPStream implements Runnable{
         String res = QRCodeReader.readCode(im);
         if(res != null) {
             id++;
-            try {
+            /*try {
                 ImageIO.write(im, "jpg", outputfile);
             } catch (IOException e) {
                 e.printStackTrace();
+            }*/
+
+            //Try sending requests:
+            if(res.equals("RELAY1")) {
+                httpClient.get("http://192.168.1.250/relay_control?1=on");
+            }else if(res.equals("RELAY2")) {
+                httpClient.get("http://192.168.1.250/relay_control?2=on");
             }
         }
         System.out.println("READ this: "+res);
