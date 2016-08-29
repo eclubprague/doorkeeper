@@ -27,7 +27,7 @@ public class BluetoothTinyb {
     public BluetoothTinyb(){
         allowedMACs = new HashMap<String, Boolean>();
         allowedMACs.put("B0:B4:48:BF:C6:84",false);
-        //allowedMACs.put("B0:B4:48:BD:D3:05",false);
+        allowedMACs.put("B0:B4:48:BD:D3:05",false);
 
 
     }
