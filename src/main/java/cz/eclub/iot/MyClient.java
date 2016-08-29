@@ -2,6 +2,7 @@ package cz.eclub.iot;
 
 
 import cz.eclub.iot.bluetooth.BluetoothTinyb;
+import cz.eclub.iot.opencv.RTSPStream;
 import cz.eclub.iot.services.HubService;
 import cz.eclub.iot.services.MessageService;
 import org.glassfish.jersey.client.ClientConfig;
@@ -37,7 +38,11 @@ public class MyClient {
 
 
     public void run() throws InterruptedException {
-        new BluetoothTinyb().scan(messageService);
+        //new BluetoothTinyb().scan(messageService);
+
+        RTSPStream rtspStream = new RTSPStream();
+        new Thread(rtspStream).start();
+
 
     }
 
@@ -50,34 +55,10 @@ public class MyClient {
 
 
         System.out.println(System.getProperty("java.library.path"));
-        MyClient myClient = new MyClient();
-        myClient.run();
+        MyClient myClient = new MyClient();myClient.run();
 
-        //runBT();
 
-        //TODO STREAM
-        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
-        VideoCapture capture = new VideoCapture();
-        capture.open("rtsp://192.168.1.250/");
-        while (capture.isOpened()) {
 
-            Mat frame = new Mat();
-
-            //camera.grab();
-            //System.out.println("Frame Grabbed");
-            //camera.retrieve(frame);
-            //System.out.println("Frame Decoded");
-
-            capture.read(frame);
-            System.out.println("Frame Obtained");
-
-            System.out.println("Captured Frame Width " + frame.width());
-            Highgui.imwrite("camera.jpg", frame);
-            System.out.println("OK");
-
-            break;
-        }
-        capture.release();
     }
 
 }
