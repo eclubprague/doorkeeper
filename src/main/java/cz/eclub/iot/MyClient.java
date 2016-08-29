@@ -5,6 +5,7 @@ import cz.eclub.iot.bluetooth.BluetoothTinyb;
 import cz.eclub.iot.opencv.RTSPStream;
 import cz.eclub.iot.services.HubService;
 import cz.eclub.iot.services.MessageService;
+import cz.eclub.iot.services.SensorService;
 import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.jackson.JacksonFeature;
 
@@ -25,7 +26,7 @@ public class MyClient {
     Client client;
     WebTarget webTarget;
     HubService hubService;
-    MessageService messageService;
+    SensorService sensorService;
 
 
     public MyClient() {
@@ -33,15 +34,15 @@ public class MyClient {
         config = new ClientConfig().register(JacksonFeature.class);
         client = ClientBuilder.newClient(config);
         webTarget = client.target("http://iot.eclubprague.com:8080/iot-server/webapi/");
-        messageService = new MessageService(webTarget);
+        sensorService = new SensorService(webTarget);
     }
 
 
     public void run() throws InterruptedException {
-        //new BluetoothTinyb().scan(messageService);
+        new BluetoothTinyb().scan(sensorService);
 
-        RTSPStream rtspStream = new RTSPStream();
-        new Thread(rtspStream).start();
+        //RTSPStream rtspStream = new RTSPStream();
+        //new Thread(rtspStream).start();
 
 
     }

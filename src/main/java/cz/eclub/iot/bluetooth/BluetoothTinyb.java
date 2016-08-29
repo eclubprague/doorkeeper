@@ -2,6 +2,7 @@ package cz.eclub.iot.bluetooth;
 
 import cz.eclub.iot.services.HubService;
 import cz.eclub.iot.services.MessageService;
+import cz.eclub.iot.services.SensorService;
 import tinyb.*;
 
 import java.util.Arrays;
@@ -41,7 +42,7 @@ public class BluetoothTinyb {
         System.out.println();
     }
 
-    public void scan(MessageService messageService) throws InterruptedException {
+    public void scan(SensorService sensorService) throws InterruptedException {
 
         BluetoothManager manager = BluetoothManager.getBluetoothManager();
 
@@ -60,7 +61,7 @@ public class BluetoothTinyb {
                     if(device.connect()){
                         System.out.println("successfully connected");
                         allowedMACs.put(device.getAddress(),true);
-                        new Thread(new TemperatureReader(device,messageService)).start();
+                        new Thread(new TemperatureReader(device,sensorService)).start();
 
                     }
                 }

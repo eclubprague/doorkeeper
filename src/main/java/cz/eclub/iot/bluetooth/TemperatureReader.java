@@ -1,8 +1,10 @@
 package cz.eclub.iot.bluetooth;
 
 import cz.eclub.iot.model.classes.MessageEntity;
+import cz.eclub.iot.model.classes.SensorEntity;
 import cz.eclub.iot.services.HubService;
 import cz.eclub.iot.services.MessageService;
+import cz.eclub.iot.services.SensorService;
 import tinyb.BluetoothDevice;
 import tinyb.BluetoothGattCharacteristic;
 import tinyb.BluetoothGattService;
@@ -17,15 +19,15 @@ public class TemperatureReader implements Runnable {
 
     private BluetoothDevice bluetoothDevice;
     private BluetoothGattService tempService = null;
-    private MessageService messageService;
+    private SensorService sensorService;
 
     private BluetoothGattCharacteristic tempValue;
     private BluetoothGattCharacteristic tempConfig;
     private BluetoothGattCharacteristic tempPeriod;
 
-    public TemperatureReader(BluetoothDevice bluetoothDevice, MessageService messageService){
+    public TemperatureReader(BluetoothDevice bluetoothDevice, SensorService sensorService){
         this.bluetoothDevice=bluetoothDevice;
-        this.messageService=messageService;
+        this.sensorService=sensorService;
 
         try {
             tempService = getService(bluetoothDevice, "f000aa00-0451-4000-b000-000000000000");
@@ -64,7 +66,10 @@ public class TemperatureReader implements Runnable {
             float ambientTempCelsius = convertCelsius(ambientTempRaw);
             System.out.println(bluetoothDevice.getAddress()+" Temp = "+ambientTempCelsius);
 
-            messageService.postMessage(new MessageEntity(String.valueOf(ambientTempCelsius)));
+            SensorEntity sensorEntity = new SensorEntity(bluetoothDevice.getAddress(),String.valueOf(ambientTempCelsius),"Temperature","°C",System.currentTimeMillis());
+
+
+            sensorService.postMessage(sensorEntity);
 
             try {
                 Thread.sleep(200);
