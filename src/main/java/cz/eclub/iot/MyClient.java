@@ -41,6 +41,10 @@ public class MyClient {
 
     }
 
+    public void runSip() throws InterruptedException {
+
+
+    }
 
     public static void main(String[] args) throws InterruptedException {
 

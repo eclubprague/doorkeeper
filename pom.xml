@@ -83,6 +83,12 @@
             <version>3.2.1</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.opentelecoms.sip</groupId>
+            <artifactId>mjsip-fork</artifactId>
+            <version>1.6+lumicall.2</version>
+        </dependency>
+
 
     </dependencies>
 
