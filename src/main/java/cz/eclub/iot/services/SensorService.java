@@ -1,6 +1,7 @@
 package cz.eclub.iot.services;
 
 import cz.eclub.iot.model.classes.SensorEntity;
+import org.glassfish.jersey.client.internal.HttpUrlConnector;
 
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.Invocation;

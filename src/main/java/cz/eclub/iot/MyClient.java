@@ -38,7 +38,8 @@ public class MyClient {
             KeyStore ks;
             char[] storepass = "changeit".toCharArray();
             char[] keypass = "changeit".toCharArray();
-            String storename = "/usr/lib/jvm/java-8-openjdk-amd64/jre/lib/security/cacerts";
+            //String storename = "/usr/lib/jvm/java-8-openjdk-amd64/jre/lib/security/cacerts";
+            String storename = "C:\\Program Files\\Java\\jdk1.8.0_45\\jre\\lib\\security\\cacerts";
 
             InputStream kis = new FileInputStream(storename);
             KeyStore trustStore = KeyStore.getInstance("jks");

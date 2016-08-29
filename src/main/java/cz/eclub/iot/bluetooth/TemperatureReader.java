@@ -68,7 +68,7 @@ public class TemperatureReader implements Runnable {
 
 
 
-            SensorEntity sensorEntity = new SensorEntity(bluetoothDevice.getAddress().replaceAll(":",""),String.valueOf(ambientTempCelsius),"Temperature","degree celsius",System.currentTimeMillis());
+            SensorEntity sensorEntity = new SensorEntity(bluetoothDevice.getAddress().replaceAll(":",""),""+ambientTempCelsius,"Temperature","degree celsius",System.currentTimeMillis());
 
             System.out.println(sensorEntity);
 

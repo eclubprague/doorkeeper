@@ -11,7 +11,7 @@ public class DummyScanner {
         while (true) {
 
 
-            SensorEntity sensorEntity = new SensorEntity("dummy",String.valueOf(Math.random()),"Random","number",System.currentTimeMillis());
+            SensorEntity sensorEntity = new SensorEntity("B0B448BFC684",String.valueOf(Math.random()),"Random","number",System.currentTimeMillis());
 
             System.out.println(sensorEntity);
 
