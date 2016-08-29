@@ -64,15 +64,18 @@ public class TemperatureReader implements Runnable {
             byte[] tempRaw = tempValue.readValue();
             int ambientTempRaw = (tempRaw[2] & 0xff) | (tempRaw[3] << 8);
             float ambientTempCelsius = convertCelsius(ambientTempRaw);
-            System.out.println(bluetoothDevice.getAddress()+" Temp = "+ambientTempCelsius);
+            //System.out.println(bluetoothDevice.getAddress()+" Temp = "+ambientTempCelsius);
 
-            SensorEntity sensorEntity = new SensorEntity(bluetoothDevice.getAddress(),String.valueOf(ambientTempCelsius),"Temperature","°C",System.currentTimeMillis());
 
+
+            SensorEntity sensorEntity = new SensorEntity(bluetoothDevice.getAddress().replaceAll(":",""),String.valueOf(ambientTempCelsius),"Temperature","degree celsius",System.currentTimeMillis());
+
+            System.out.println(sensorEntity);
 
             sensorService.postMessage(sensorEntity);
 
             try {
-                Thread.sleep(200);
+                Thread.sleep(5000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

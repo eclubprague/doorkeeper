@@ -45,16 +45,16 @@ public class BluetoothTinyb {
     public void scan(SensorService sensorService) throws InterruptedException {
 
         BluetoothManager manager = BluetoothManager.getBluetoothManager();
-
         boolean discoveryStarted = manager.startDiscovery();
-
         System.out.println("The discovery started: " + (discoveryStarted ? "true" : "false"));
-
 
         BluetoothDevice sensor = null;
         while(true){
             List<BluetoothDevice> list = manager.getDevices();
             for (BluetoothDevice device : list) {
+                //if(allowedMACs.containsKey(device.getAddress())){
+                //    allowedMACs.put(device.getAddress(),device.getConnected());
+                //}
 
                 if(!allowedMACs.getOrDefault(device.getAddress(),true)){
                     System.out.println("needs to connect to the "+device.getAddress());
@@ -62,6 +62,7 @@ public class BluetoothTinyb {
                         System.out.println("successfully connected");
                         allowedMACs.put(device.getAddress(),true);
                         new Thread(new TemperatureReader(device,sensorService)).start();
+
 
                     }
                 }

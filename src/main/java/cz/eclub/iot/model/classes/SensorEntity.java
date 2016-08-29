@@ -4,25 +4,25 @@ import javax.persistence.Entity;
 
 @Entity
 public class SensorEntity extends AbstractEntity {
-    private String UUID,value,unitName,unitSign;
+    private String _UUID,value,unitName,unitSign;
     private long timestamp;
 
     public SensorEntity(){};
 
-    public SensorEntity(String UUID, String value, String unitName, String unitSign, long timestamp) {
-        this.UUID=UUID;
+    public SensorEntity(String _UUID, String value, String unitName, String unitSign, long timestamp) {
+        this._UUID=_UUID;
         this.value=value;
         this.unitName=unitName;
         this.unitSign=unitSign;
         this.timestamp=timestamp;
     }
 
-    public String getUUID() {
-        return UUID;
+    public String get_UUID() {
+        return _UUID;
     }
 
-    public void setUUID(String UUID) {
-        this.UUID = UUID;
+    public void set_UUID(String _UUID) {
+        this._UUID = _UUID;
     }
 
     public String getValue() {
@@ -49,10 +49,18 @@ public class SensorEntity extends AbstractEntity {
         this.unitSign = unitSign;
     }
 
+    public long getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(long timestamp) {
+        this.timestamp = timestamp;
+    }
+
     @Override
     public String toString() {
         return "SensorEntity{" +
-                "UUID='" + UUID + '\'' +
+                "_UUID='" + _UUID + '\'' +
                 ", value='" + value + '\'' +
                 ", unitName='" + unitName + '\'' +
                 ", unitSign='" + unitSign + '\'' +

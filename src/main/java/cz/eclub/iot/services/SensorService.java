@@ -21,5 +21,6 @@ public class SensorService {
 
         Invocation.Builder invocationBuilder = webTarget.request(MediaType.APPLICATION_JSON);
         Response response = invocationBuilder.post(Entity.entity(messageEntity, MediaType.APPLICATION_JSON));
+        System.out.println(response.getStatus());
     }
 }
