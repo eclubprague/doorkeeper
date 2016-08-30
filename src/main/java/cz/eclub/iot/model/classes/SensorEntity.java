@@ -4,17 +4,17 @@ import javax.persistence.Entity;
 
 @Entity
 public class SensorEntity extends AbstractEntity {
-    private String _UUID,value,unitName,unitSign;
+    private String _UUID, value, unitName, unitSign;
     private long timestamp;
 
-    public SensorEntity(){};
+    public SensorEntity() {};
 
     public SensorEntity(String _UUID, String value, String unitName, String unitSign, long timestamp) {
-        this._UUID=_UUID;
-        this.value=value;
-        this.unitName=unitName;
-        this.unitSign=unitSign;
-        this.timestamp=timestamp;
+        this._UUID = _UUID;
+        this.value = value;
+        this.unitName = unitName;
+        this.unitSign = unitSign;
+        this.timestamp = timestamp;
     }
 
     public String get_UUID() {

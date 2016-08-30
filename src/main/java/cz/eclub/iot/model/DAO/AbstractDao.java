@@ -73,7 +73,7 @@ public class AbstractDao<T extends AbstractEntity> implements IAbstractDao<T>, S
         q.select(abstractRoot);
         ParameterExpression<Integer> p = getEntityManager().getCriteriaBuilder().parameter(Integer.class);
 
-        q.where(getEntityManager().getCriteriaBuilder().equal(abstractRoot.get("id"),p));
+        q.where(getEntityManager().getCriteriaBuilder().equal(abstractRoot.get("id"), p));
         Query qq = getEntityManager().createQuery(q);
         return !qq.setParameter(p, entity.getId()).getResultList().isEmpty();
     }
@@ -85,10 +85,10 @@ public class AbstractDao<T extends AbstractEntity> implements IAbstractDao<T>, S
         q.select(abstractRoot);
         ParameterExpression<Integer> p = getEntityManager().getCriteriaBuilder().parameter(Integer.class);
 
-        q.where(getEntityManager().getCriteriaBuilder().equal(abstractRoot.get("id"),p));
+        q.where(getEntityManager().getCriteriaBuilder().equal(abstractRoot.get("id"), p));
         Query qq = getEntityManager().createQuery(q);
         List<T> resultList = qq.setParameter(p, id).getResultList();
-        return (resultList.isEmpty())? null : resultList.get(0);
+        return (resultList.isEmpty()) ? null : resultList.get(0);
     }
 
     @Override
