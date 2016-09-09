@@ -12,7 +12,7 @@ public class HTTPClient {
     private HttpClient client;
 
     public HTTPClient() {
-       client = HttpClientBuilder.create().build();
+        client = HttpClientBuilder.create().build();
     }
 
     public HttpResponse get(String url) {

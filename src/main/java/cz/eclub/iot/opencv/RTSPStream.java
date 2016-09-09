@@ -8,15 +8,11 @@ import org.opencv.core.Mat;
 import org.opencv.highgui.Highgui;
 import org.opencv.highgui.VideoCapture;
 
-import javax.imageio.ImageIO;
-import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
-import java.nio.Buffer;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class RTSPStream implements Runnable{
+public class RTSPStream implements Runnable {
     private int id = 0;
 
     private VideoCapture capture;
@@ -44,7 +40,7 @@ public class RTSPStream implements Runnable{
         capture.open(rtspAddress);
 
 
-        if(capture.isOpened()) {
+        if (capture.isOpened()) {
             System.out.println("Stream is running!");
             isRunning.set(true);
         }
@@ -60,10 +56,10 @@ public class RTSPStream implements Runnable{
         Mat frame = readFrame();
         Highgui.imwrite("camera.jpg", frame);
         BufferedImage im = ImageConverter.bufferedImageFromMat(frame);
-        File outputfile = new File("saved"+id+".jpg");
+        File outputfile = new File("saved" + id + ".jpg");
 
         String res = QRCodeReader.readCode(im);
-        if(res != null) {
+        if (res != null) {
             id++;
             /*try {
                 ImageIO.write(im, "jpg", outputfile);
@@ -72,13 +68,13 @@ public class RTSPStream implements Runnable{
             }*/
 
             //Try sending requests:
-            if(res.equals("RELAY1")) {
+            if (res.equals("RELAY1")) {
                 httpClient.get("http://192.168.1.250/relay_control?1=on");
-            }else if(res.equals("RELAY2")) {
+            } else if (res.equals("RELAY2")) {
                 httpClient.get("http://192.168.1.250/relay_control?2=on");
             }
         }
-        System.out.println("READ this: "+res);
+        System.out.println("READ this: " + res);
         //kill();
     }
 
@@ -91,18 +87,18 @@ public class RTSPStream implements Runnable{
     }
 
     public synchronized Mat readFrame() {
-        if(isRunning()) {
+        if (isRunning()) {
             Mat frame = new Mat();
-            if(capture.isOpened()) {
+            if (capture.isOpened()) {
                 capture.read(frame);
-                System.out.println("Frame read: W: "+frame.width()+" H: "+frame.height());
+                System.out.println("Frame read: W: " + frame.width() + " H: " + frame.height());
                 return frame;
-            }else {
+            } else {
                 System.err.println("ERROR: No stream opened!");
                 return null;
             }
 
-        }else {
+        } else {
             System.err.println("ERROR: Stream service is not running!");
             return null;
         }

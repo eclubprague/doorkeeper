@@ -3,12 +3,11 @@ package cz.eclub.iot.opencv;
 import org.opencv.core.Mat;
 
 import java.awt.image.BufferedImage;
-import java.awt.image.DataBufferByte;
 
 public class ImageConverter {
 
     public static BufferedImage bufferedImageFromMat(Mat mat) {
-        if ( mat != null ) {
+        if (mat != null) {
             int cols = mat.cols();
             int rows = mat.rows();
             int elemSize = (int) mat.elemSize();
@@ -35,7 +34,7 @@ public class ImageConverter {
             BufferedImage bimg = new BufferedImage(cols, rows, type);
             bimg.getRaster().setDataElements(0, 0, cols, rows, data);
             return bimg;
-        }else {
+        } else {
             return null;
         }
     }
