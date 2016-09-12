@@ -70,9 +70,9 @@ public class RTSPStream {
 
             //Try sending requests:
             if (res.equals("RELAY1")) {
-                httpClient.get("http://192.168.1.250/relay_control?1=on");
+                httpClient.get("http://"+Constants.DOORBELL_IP+"/relay_control?1=on");
             } else if (res.equals("RELAY2")) {
-                httpClient.get("http://192.168.1.250/relay_control?2=on");
+                httpClient.get("http://"+Constants.DOORBELL_IP+"/relay_control?2=on");
             }
         }
         //kill();

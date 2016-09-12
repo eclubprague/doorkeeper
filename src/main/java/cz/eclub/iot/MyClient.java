@@ -13,6 +13,10 @@ public class MyClient {
     }
 
     public static void main(String[] args) throws InterruptedException {
+        System.out.println("-----------------------------------------------");
+        System.out.println("Doorkeeper v0.0.1");
+        System.out.println("Copyright (c) 2016 eClub | www.eclubprague.com");
+        System.out.println("-----------------------------------------------");
         Scanner scan = new Scanner(System.in);
         System.out.println("Please insert IP Address:");
         String ip = scan.nextLine();
@@ -22,6 +26,7 @@ public class MyClient {
         }
 
         Constants.RTSP_STREAM_ADDRESS = "rtsp://"+ip+"/";
+        Constants.DOORBELL_IP = ip;
         MyClient myClient = new MyClient();
         myClient.run();
 
