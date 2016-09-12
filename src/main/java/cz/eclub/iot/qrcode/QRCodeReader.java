@@ -20,7 +20,7 @@ public class QRCodeReader {
             qrCodeResult = new MultiFormatReader().decode(binaryBitmap);
             return qrCodeResult.getText();
         } catch (NotFoundException e) {
-            e.printStackTrace();
+
             return null;
         }
 

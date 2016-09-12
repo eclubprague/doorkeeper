@@ -2,6 +2,9 @@ package cz.eclub.iot;
 
 
 import cz.eclub.iot.opencv.RTSPStream;
+import cz.eclub.iot.utils.Constants;
+
+import java.util.Scanner;
 
 
 public class MyClient {
@@ -10,8 +13,15 @@ public class MyClient {
     }
 
     public static void main(String[] args) throws InterruptedException {
+        Scanner scan = new Scanner(System.in);
+        System.out.println("Please insert IP Address:");
+        String ip = scan.nextLine();
+        while(ip.equals("")) {
+            System.out.println("IP address was not specified! Please specify!");
+            ip = scan.nextLine();
+        }
 
-        System.out.println(System.getProperty("java.library.path"));
+        Constants.RTSP_STREAM_ADDRESS = "rtsp://"+ip+"/";
         MyClient myClient = new MyClient();
         myClient.run();
 
@@ -21,7 +31,6 @@ public class MyClient {
 
         RTSPStream rtspStream = new RTSPStream();
         rtspStream.run();
-
 
     }
 

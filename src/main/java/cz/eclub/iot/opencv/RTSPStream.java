@@ -1,5 +1,6 @@
 package cz.eclub.iot.opencv;
 
+import com.google.zxing.NotFoundException;
 import cz.eclub.iot.http.HTTPClient;
 import cz.eclub.iot.qrcode.QRCodeReader;
 import cz.eclub.iot.utils.Constants;
@@ -19,13 +20,14 @@ public class RTSPStream {
     private String rtspAddress;
     private AtomicBoolean isRunning = new AtomicBoolean();
     private HTTPClient httpClient;
-
+    private String lastMessage = "";
     public RTSPStream() {
         this(Constants.RTSP_STREAM_ADDRESS);
     }
 
     public RTSPStream(String address) {
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+        System.loadLibrary("opencv_ffmpeg249_64");
         this.videoCapture = new VideoCapture();
         this.rtspAddress = address;
         this.isRunning.set(false);
@@ -35,18 +37,9 @@ public class RTSPStream {
 
 
     public void run() {
-        System.out.println("Starting stream!");
+        System.out.println("Starting stream ...");
         //Open the stream
         videoCapture.open(rtspAddress);
-        for (int i = 0; i < 10; i++) {
-            System.out.println(videoCapture.isOpened());
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
-        }
 
         if (videoCapture.isOpened()) {
             System.out.println("Stream is running!");
@@ -82,7 +75,6 @@ public class RTSPStream {
                 httpClient.get("http://192.168.1.250/relay_control?2=on");
             }
         }
-        System.out.println("READ this: " + res);
         //kill();
     }
 
@@ -96,16 +88,15 @@ public class RTSPStream {
 
     public synchronized Mat readFrame() {
         if (isRunning()) {
-            Mat frame = new Mat();
-            if (videoCapture.isOpened()) {
-                videoCapture.read(frame);
-                System.out.println("Frame read: W: " + frame.width() + " H: " + frame.height());
-                return frame;
-            } else {
-                System.err.println("ERROR: No stream opened!");
-                return null;
-            }
-
+                Mat frame = new Mat();
+                if (videoCapture.isOpened()) {
+                    videoCapture.read(frame);
+                    //System.out.println("Frame read: W: " + frame.width() + " H: " + frame.height());
+                    return frame;
+                } else {
+                    System.err.println("ERROR: No stream opened!");
+                    return null;
+                }
         } else {
             System.err.println("ERROR: Stream service is not running!");
             return null;
