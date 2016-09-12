@@ -12,10 +12,10 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class RTSPStream implements Runnable {
+public class RTSPStream {
     private int id = 0;
 
-    private VideoCapture capture;
+    private VideoCapture videoCapture;
     private String rtspAddress;
     private AtomicBoolean isRunning = new AtomicBoolean();
     private HTTPClient httpClient;
@@ -26,21 +26,29 @@ public class RTSPStream implements Runnable {
 
     public RTSPStream(String address) {
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
-        this.capture = new VideoCapture();
+        this.videoCapture = new VideoCapture();
         this.rtspAddress = address;
         this.isRunning.set(false);
 
         httpClient = new HTTPClient();
     }
 
-    @Override
+
     public void run() {
         System.out.println("Starting stream!");
         //Open the stream
-        capture.open(rtspAddress);
+        videoCapture.open(rtspAddress);
+        for (int i = 0; i < 10; i++) {
+            System.out.println(videoCapture.isOpened());
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
 
+        }
 
-        if (capture.isOpened()) {
+        if (videoCapture.isOpened()) {
             System.out.println("Stream is running!");
             isRunning.set(true);
         }
@@ -49,7 +57,7 @@ public class RTSPStream implements Runnable {
             process();
         }
         System.out.println("Stopping stream!");
-        capture.release();
+        videoCapture.release();
     }
 
     private void process() {
@@ -89,8 +97,8 @@ public class RTSPStream implements Runnable {
     public synchronized Mat readFrame() {
         if (isRunning()) {
             Mat frame = new Mat();
-            if (capture.isOpened()) {
-                capture.read(frame);
+            if (videoCapture.isOpened()) {
+                videoCapture.read(frame);
                 System.out.println("Frame read: W: " + frame.width() + " H: " + frame.height());
                 return frame;
             } else {

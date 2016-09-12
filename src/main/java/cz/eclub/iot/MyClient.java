@@ -20,7 +20,7 @@ public class MyClient {
     public void run() throws InterruptedException {
 
         RTSPStream rtspStream = new RTSPStream();
-        new Thread(rtspStream).start();
+        rtspStream.run();
 
 
     }
