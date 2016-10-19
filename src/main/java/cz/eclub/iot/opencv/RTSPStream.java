@@ -9,8 +9,10 @@ import org.opencv.core.Mat;
 import org.opencv.highgui.Highgui;
 import org.opencv.highgui.VideoCapture;
 
+import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class RTSPStream {
@@ -26,8 +28,15 @@ public class RTSPStream {
     }
 
     public RTSPStream(String address) {
-        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
-        System.loadLibrary("opencv_ffmpeg249_64");
+
+        if(System.getProperty("sun.arch.data.model").equals("64")) {
+            System.loadLibrary("opencv_java249_64");
+            System.loadLibrary("opencv_ffmpeg249_64");
+        }else {
+            System.loadLibrary("opencv_java249");
+            System.loadLibrary("opencv_ffmpeg249");
+        }
+
         this.videoCapture = new VideoCapture();
         this.rtspAddress = address;
         this.isRunning.set(false);
@@ -55,18 +64,15 @@ public class RTSPStream {
 
     private void process() {
         Mat frame = readFrame();
-        Highgui.imwrite("camera.jpg", frame);
+        //Highgui.imwrite("camera.jpg", frame);
         BufferedImage im = ImageConverter.bufferedImageFromMat(frame);
         File outputfile = new File("saved" + id + ".jpg");
 
         String res = QRCodeReader.readCode(im);
+        id++;
         if (res != null) {
-            id++;
-            /*try {
-                ImageIO.write(im, "jpg", outputfile);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }*/
+            System.out.println("FOUND WITH ID: "+id);
+
 
             //Try sending requests:
             if (res.equals("RELAY1")) {
@@ -74,6 +80,12 @@ public class RTSPStream {
             } else if (res.equals("RELAY2")) {
                 httpClient.get("http://"+Constants.DOORBELL_IP+"/relay_control?2=on");
             }
+        }
+
+        try {
+                ImageIO.write(im, "jpg", outputfile);
+            } catch (IOException e) {
+                e.printStackTrace();
         }
         //kill();
     }
