@@ -4,8 +4,7 @@ package cz.eclub.iot;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
-import cz.eclub.iot.opencv.RTSPStream;
-import cz.eclub.iot.qrcode.QRCodeReader;
+import cz.eclub.iot.qrcode.QRCodeReaderMine;
 import cz.eclub.iot.utils.Constants;
 
 import javax.imageio.ImageIO;
@@ -48,7 +47,15 @@ public class MyClient implements Runnable{
         Constants.DOORBELL_IP = ip;
         MyClient myClient = new MyClient();
         //myClient.run();
-        scheduleHandler = scheduler.scheduleAtFixedRate(myClient, 0, 250, TimeUnit.MILLISECONDS);
+
+        File mustDoFile = new File("mustdo.jpg");
+        try {
+            BufferedImage imBuff = ImageIO.read(mustDoFile);
+            System.out.println(QRCodeReaderMine.readCode(imBuff));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        //scheduleHandler = scheduler.scheduleAtFixedRate(myClient, 0, 250, TimeUnit.MILLISECONDS);
     }
 
     @Override
@@ -61,7 +68,7 @@ public class MyClient implements Runnable{
             InputStream inputStream = response.body().byteStream();
             BufferedImage imBuff = ImageIO.read(inputStream);
 
-            String data = QRCodeReader.readCode(imBuff);
+            String data = QRCodeReaderMine.readCode(imBuff);
             System.out.println(data);
             String add = "";
             File outputfile;

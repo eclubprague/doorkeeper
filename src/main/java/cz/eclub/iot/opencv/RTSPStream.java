@@ -1,12 +1,9 @@
 package cz.eclub.iot.opencv;
 
-import com.google.zxing.NotFoundException;
 import cz.eclub.iot.http.HTTPClient;
-import cz.eclub.iot.qrcode.QRCodeReader;
+import cz.eclub.iot.qrcode.QRCodeReaderMine;
 import cz.eclub.iot.utils.Constants;
-import org.opencv.core.Core;
 import org.opencv.core.Mat;
-import org.opencv.highgui.Highgui;
 import org.opencv.highgui.VideoCapture;
 
 import javax.imageio.ImageIO;
@@ -68,7 +65,7 @@ public class RTSPStream {
         BufferedImage im = ImageConverter.bufferedImageFromMat(frame);
         File outputfile = new File("saved" + id + ".jpg");
 
-        String res = QRCodeReader.readCode(im);
+        String res = QRCodeReaderMine.readCode(im);
         id++;
         if (res != null) {
             System.out.println("FOUND WITH ID: "+id);
