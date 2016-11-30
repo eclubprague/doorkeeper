@@ -19,14 +19,14 @@ public class QRCodeReaderMine {
                         image)));
         Result qrCodeResult = null;
         try {
-            Map<DecodeHintType, Object> map = new HashMap();
-            map.put(DecodeHintType.TRY_HARDER, Boolean.TRUE);
             List<BarcodeFormat> formats = new ArrayList<>();
             formats.add(BarcodeFormat.QR_CODE);
-            map.put(DecodeHintType.POSSIBLE_FORMATS, formats);
-            map.put(DecodeHintType.TRY_HARDER, Boolean.TRUE);
+
             Map hintMap = new HashMap();
-            hintMap.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.L);
+            hintMap.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.H);
+            hintMap.put(DecodeHintType.POSSIBLE_FORMATS, formats);
+            hintMap.put(DecodeHintType.TRY_HARDER, Boolean.TRUE);
+
             qrCodeResult = new MultiFormatReader().decode(binaryBitmap,hintMap);
             return qrCodeResult.getText();
         } catch (NotFoundException e) {
