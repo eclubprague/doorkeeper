@@ -46,16 +46,15 @@ public class MyClient implements Runnable{
         Constants.RTSP_STREAM_ADDRESS = "rtsp://"+ip+"/";
         Constants.DOORBELL_IP = ip;
         MyClient myClient = new MyClient();
-        //myClient.run();
 
-        File mustDoFile = new File("mustdo.jpg");
+        /*File mustDoFile = new File("mustdo.jpg");
         try {
             BufferedImage imBuff = ImageIO.read(mustDoFile);
             System.out.println(QRCodeReaderMine.readCode(imBuff));
         } catch (IOException e) {
             e.printStackTrace();
-        }
-        //scheduleHandler = scheduler.scheduleAtFixedRate(myClient, 0, 250, TimeUnit.MILLISECONDS);
+        }*/
+        scheduleHandler = scheduler.scheduleAtFixedRate(myClient, 0, 250, TimeUnit.MILLISECONDS);
     }
 
     @Override
